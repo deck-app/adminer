@@ -1,7 +1,7 @@
 version: "3"
 services:
   adminer:
-    image: "dockage/adminer:4.2.5"
+    image: "dockage/adminer:latest"
     ports:
       - "${ADM_PORT}:80"
       - "${ADMS_PORT}:443"
