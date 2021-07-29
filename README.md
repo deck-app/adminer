@@ -2,7 +2,7 @@
 
 ## Docker Images
 
-❗For better reliability we release images with stability tags (`wodby/adminer:4.8-X.X.X`) which correspond to [git tags](https://github.com/wodby/adminer/releases). We strongly recommend using images only with stability tags. 
+❗For better reliability we release images with stability tags (`adminer:latest`) which correspond to [git tags](https://github.com/wodby/adminer/releases). We strongly recommend using images only with stability tags. 
 
 Overview:
 
