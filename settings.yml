@@ -46,5 +46,5 @@ system:
   #Generate public ports for the docker image
   ports:
     http: ADM_PORT
-    others:
-      - ADMS_PORT
+    # others:
+    #   - ADMS_PORT
