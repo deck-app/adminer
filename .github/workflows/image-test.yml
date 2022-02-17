@@ -18,7 +18,7 @@ jobs:
       run: docker-compose -f "docker-compose.yml" up -d --build
     - name: PHP version check
       run:  docker exec adminer_adminer_1 php -v
-    - name: Symfony test
+    - name: Localhost test
       run:  |
         bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
     - name: Destroy container and file
@@ -31,7 +31,7 @@ jobs:
       run: docker-compose -f "docker-compose.yml" up -d --build
     - name: PHP version check
       run:  docker exec adminer_adminer_1 php -v
-    - name: Symfony test
+    - name: Localhost test
       run:  |
         bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
     - name: Destroy container and file
