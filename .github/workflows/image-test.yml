@@ -35,5 +35,7 @@ jobs:
       run:  |
         bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
     - name: Destroy container and file
-      run:  docker-compose down
+      run:  |
+        docker-compose down
+        echo "y" | docker image prune -a
 
