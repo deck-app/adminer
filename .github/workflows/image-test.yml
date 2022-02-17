@@ -1,0 +1,39 @@
+name: Adminer 
+
+on:
+  schedule:
+  - cron:  '30 21 * * *'
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  Adminer-AMD64:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image Adminer
+      run: docker-compose -f "docker-compose.yml" up -d --build
+    - name: PHP version check
+      run:  docker exec adminer_adminer_1 php -v
+    - name: Symfony test
+      run:  |
+        bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
+    - name: Destroy container and file
+      run:  docker-compose down
+  Adminer-ARM64:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image Adminer
+      run: docker-compose -f "docker-compose.yml" up -d --build
+    - name: PHP version check
+      run:  docker exec adminer_adminer_1 php -v
+    - name: Symfony test
+      run:  |
+        bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
+    - name: Destroy container and file
+      run:  docker-compose down
+
