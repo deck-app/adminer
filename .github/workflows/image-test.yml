@@ -2,7 +2,7 @@ name: Adminer
 
 on:
   schedule:
-  - cron:  '30 21 * * *'
+  - cron:  '00 2 * * *'
   push:
     branches: [ master ]
   pull_request:
@@ -30,12 +30,12 @@ jobs:
     - name: Build the Docker image Adminer
       run: docker-compose -f "docker-compose.yml" up -d --build
     - name: PHP version check
-      run:  docker exec adminer_adminer_1 php -v
+      run:  docker exec adminer-adminer-1 php -v
     - name: Localhost test
       run:  |
         bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
     - name: Destroy container and file
       run:  |
         docker-compose down
-        echo "y" | docker image prune -a
+        echo "y" | docker system prune -a
 
