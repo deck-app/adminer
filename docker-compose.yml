@@ -1,7 +1,7 @@
 version: "3"
 services:
   adminer:
-    image: adminer:latest
+    image: ghcr.io/deck-app/adminer:v4.8
     ports:
       - '${ADM_PORT}:8080'
 volumes: {}
