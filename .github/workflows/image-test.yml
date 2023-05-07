@@ -15,6 +15,13 @@ jobs:
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
+    - name: Slack Notification
+      uses: act10ns/slack@v1
+      with: 
+        status: starting
+        channel: '#github_action_status'
+        message: Starting Adminer AMD 64 Build and Testing...
+      if: always()
     - uses: actions/checkout@v2
     - name: Build the Docker image Adminer
       run: docker-compose -f "docker-compose.yml" up -d --build
