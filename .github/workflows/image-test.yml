@@ -20,6 +20,8 @@ jobs:
       with: 
         status: starting
         channel: '#github_action_status'
+        SLACK_COLOR: ${{ job.status }}
+        SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
         message: Starting Adminer AMD 64 Build and Testing...
       if: always()
     - uses: actions/checkout@v2
@@ -38,8 +40,10 @@ jobs:
       uses: act10ns/slack@v1
       with: 
         status: ${{ job.status }}
+        SLACK_COLOR: ${{ job.status }}
+        SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
         channel: '#github_action_status'
-        message: Build {{ env.GITHUB_REF_NAME }} branch Successfully
+        message: Build and testing {{ job.status }}
       if: always()
   Adminer-ARM64:
     runs-on: self-hosted
