@@ -12,6 +12,7 @@ jobs:
 
   Adminer-AMD64:
     runs-on: ubuntu-latest
+    env: SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image Adminer
@@ -25,6 +26,13 @@ jobs:
       run:  curl -I --http2 http://localhost:5555
     - name: Destroy container and file
       run:  docker-compose down
+    - name: Slack Notification
+      uses: act10ns/slack@v1
+      with: 
+        status: ${{ job.status }}
+        channel: '#github_action_status'
+        message: Build {{ env.GITHUB_REF_NAME }} branch Successfully
+      if: always()
   Adminer-ARM64:
     runs-on: self-hosted
     steps:
