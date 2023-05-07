@@ -12,7 +12,8 @@ jobs:
 
   Adminer-AMD64:
     runs-on: ubuntu-latest
-    env: SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image Adminer
