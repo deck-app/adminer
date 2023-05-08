@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  Adminer-AMD:
+  Adminer:
     strategy:
       matrix:
         os: [ubuntu-latest, self-hosted]
