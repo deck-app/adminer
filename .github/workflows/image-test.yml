@@ -57,7 +57,6 @@ jobs:
         fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
         message: Waiting for Adminer AMD Build and Testing...
       if: always()
-    steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image Adminer
       run: docker-compose -f "docker-compose.yml" up -d --build
