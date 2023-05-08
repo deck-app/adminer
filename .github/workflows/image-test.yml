@@ -16,14 +16,11 @@ jobs:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
     - name: Slack Notification
-      uses: act10ns/slack@v1
+      uses: 8398a7/action-slack@v3
       with: 
         status: starting
         channel: '#github_action_status'
-        SLACK_COLOR: ${{ job.status }}
-        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-        SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
-        message: Starting Adminer AMD 64 Build and Testing...
+        message: Waiting for deployment ${{ job.status }}
       if: always()
     - uses: actions/checkout@v2
     - name: Build the Docker image Adminer
@@ -39,15 +36,23 @@ jobs:
       run:  docker-compose down
     - name: Slack Notification
       uses: 8398a7/action-slack@v3
-      # uses: actions/checkout@v3
       with: 
         status: ${{ job.status }}
-        fields: repo,message,commit,author,action,eventName,ref,workflow # selectable (default: repo,message)
+        fields: repo,message,commit,author,action,eventName,ref,workflow
         channel: '#github_action_status'
       if: always()
   Adminer-ARM64:
     runs-on: self-hosted
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
+    - name: Slack Notification
+      uses: 8398a7/action-slack@v3
+      with: 
+        status: starting
+        channel: '#github_action_status'
+        message: Waiting for deployment ${{ job.status }}
+      if: always()
     - uses: actions/checkout@v2
     - name: Build the Docker image Adminer
       run: docker-compose -f "docker-compose.yml" up -d --build
@@ -62,4 +67,11 @@ jobs:
       run:  |
         docker-compose down
         echo "y" | docker system prune -a
+    - name: Slack Notification
+      uses: 8398a7/action-slack@v3
+      with: 
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+        channel: '#github_action_status'
+      if: always()
 
