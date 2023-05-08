@@ -38,7 +38,8 @@ jobs:
     - name: Destroy container and file
       run:  docker-compose down
     - name: Slack Notification
-      uses: act10ns/slack@v1
+      uses: 8398a7/action-slack@v3
+      # uses: actions/checkout@v3
       with: 
         status: ${{ job.status }}
         fields: repo,message,commit,author,action,eventName,ref,workflow # selectable (default: repo,message)
