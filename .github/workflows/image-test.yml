@@ -16,11 +16,11 @@ jobs:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
     - name: Slack Notification
-      uses: 8398a7/action-slack@v3
+      uses: rtCamp/action-slack-notify@v2
       with: 
         status: starting
         channel: '#github_action_status'
-        message: Waiting for deployment ${{ job.status }}
+        SLACK_MESSAGE: 'Post Content :rocket:' 
       if: always()
     - uses: actions/checkout@v2
     - name: Build the Docker image Adminer
@@ -47,11 +47,11 @@ jobs:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
     - name: Slack Notification
-      uses: 8398a7/action-slack@v3
+      uses: rtCamp/action-slack-notify@v2
       with: 
         status: starting
         channel: '#github_action_status'
-        message: Waiting for deployment ${{ job.status }}
+        SLACK_MESSAGE: 'Post Content :rocket:'
       if: always()
     - uses: actions/checkout@v2
     - name: Build the Docker image Adminer
