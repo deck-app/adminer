@@ -41,8 +41,9 @@ jobs:
       uses: act10ns/slack@v1
       with: 
         status: ${{ job.status }}
-        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-        SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
+        fields: repo,message,commit,author,action,eventName,ref,workflow # selectable (default: repo,message)
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         channel: '#github_action_status'
       if: always()
   Adminer-ARM64:
