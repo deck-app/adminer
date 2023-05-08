@@ -10,8 +10,11 @@ on:
 
 jobs:
 
-  Adminer-AMD64:
-    runs-on: ubuntu-latest
+  Adminer-AMD:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, self-hosted]
+    runs-on: ${{ matrix.os }}
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
@@ -22,7 +25,7 @@ jobs:
         channel: '#github_action_status'
         SLACK_COLOR: ${{ job.status }}
         fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-        message: Waiting for Adminer AMD Build and Testing...
+        message: Waiting for Adminer Build and Testing...
       if: always()
     - uses: actions/checkout@v2
     - name: Build the Docker image Adminer
@@ -43,38 +46,38 @@ jobs:
         fields: repo,message,commit,author,action,eventName,ref,workflow
         channel: '#github_action_status'
       if: always()
-  Adminer-ARM64:
-    runs-on: self-hosted
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-    steps:
-    - name: Slack Notification
-      uses: act10ns/slack@v1
-      with: 
-        status: starting
-        channel: '#github_action_status'
-        SLACK_COLOR: ${{ job.status }}
-        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-        message: Waiting for Adminer AMD Build and Testing...
-      if: always()
-    - uses: actions/checkout@v2
-    - name: Build the Docker image Adminer
-      run: docker-compose -f "docker-compose.yml" up -d --build
-    - name: PHP version check
-      run:  docker exec adminer_adminer_1 php -v
-    - name: Localhost test
-      run:  |
-        bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
-    - name: Localhost test
-      run:  curl -I --http2 http://localhost:5555
-    - name: Destroy container and file
-      run:  |
-        docker-compose down
-        echo "y" | docker system prune -a
-    - name: Slack Notification
-      uses: 8398a7/action-slack@v3
-      with: 
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,action,eventName,ref,workflow
-        channel: '#github_action_status'
-      if: always()
+  # Adminer-ARM64:
+  #   runs-on: self-hosted
+  #   env:
+  #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  #   steps:
+  #   - name: Slack Notification
+  #     uses: act10ns/slack@v1
+  #     with: 
+  #       status: starting
+  #       channel: '#github_action_status'
+  #       SLACK_COLOR: ${{ job.status }}
+  #       fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+  #       message: Waiting for Adminer AMD Build and Testing...
+  #     if: always()
+  #   - uses: actions/checkout@v2
+  #   - name: Build the Docker image Adminer
+  #     run: docker-compose -f "docker-compose.yml" up -d --build
+  #   - name: PHP version check
+  #     run:  docker exec adminer_adminer_1 php -v
+  #   - name: Localhost test
+  #     run:  |
+  #       bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
+  #   - name: Localhost test
+  #     run:  curl -I --http2 http://localhost:5555
+  #   - name: Destroy container and file
+  #     run:  |
+  #       docker-compose down
+  #       echo "y" | docker system prune -a
+  #   - name: Slack Notification
+  #     uses: 8398a7/action-slack@v3
+  #     with: 
+  #       status: ${{ job.status }}
+  #       fields: repo,message,commit,author,action,eventName,ref,workflow
+  #       channel: '#github_action_status'
+  #     if: always()
