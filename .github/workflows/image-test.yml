@@ -13,7 +13,7 @@ jobs:
   Adminer:
     strategy:
       matrix:
-        os: [ubuntu-latest, buildjet-4vcpu-ubuntu-2204-arm]
+        os: [ubuntu-latest, raspi_4_bookworm:20230612]
     runs-on: ${{ matrix.os }}
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
