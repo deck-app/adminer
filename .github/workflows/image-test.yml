@@ -13,7 +13,7 @@ jobs:
   Adminer:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, linux-arm64]
     runs-on: ${{ matrix.os }}
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
