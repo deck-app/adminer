@@ -4,15 +4,15 @@ jobs:
   armv7_job:
     # The host should always be Linux
     runs-on: ubuntu-22.04
-    name: Build on ubuntu-18.04 armv7
+    name: Build on ubuntu-22.04 armv8
     steps:
       - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
         name: Run commands
         id: runcmd
         with:
-          arch: armv7
-          distro: ubuntu18.04
+          arch: armv8
+          distro: ubuntu22.04
 
           # Not required, but speeds up builds by storing container images in
           # a GitHub package registry.
@@ -27,7 +27,6 @@ jobs:
         # Echo the `uname` output parameter from the `runcmd` step
         run: |
           echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
-        if: always()
       - name: Build the Docker image Adminer
         run: docker-compose -f "docker-compose.yml" up -d --build
       - name: PHP version check
@@ -39,10 +38,3 @@ jobs:
         run:  curl -I --http2 http://localhost:5555
       - name: Destroy container and file
         run:  docker-compose down
-      - name: Slack Notification
-        uses: 8398a7/action-slack@v3
-        with: 
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow
-          channel: '#github_action_status'
-        if: always()
