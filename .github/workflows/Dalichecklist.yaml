@@ -9,11 +9,56 @@ on:
     branches: [ master ]
 
 jobs:
-  armv7_job:
-    # The host should always be Linux
+  Adminer-AMD64:
+    runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    steps:
+    - name: Slack Notification
+      uses: act10ns/slack@v1
+      with: 
+        status: starting
+        channel: '#github_action_status'
+        SLACK_COLOR: ${{ job.status }}
+        SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
+        message: Starting Adminer AMD 64 Build and Testing...
+      if: always()
+    - uses: actions/checkout@v2
+    - name: Build the Docker image Adminer
+      run: docker-compose -f "docker-compose.yml" up -d --build
+    - name: PHP version check
+      run:  docker exec adminer_adminer_1 php -v
+    - name: Localhost test
+      run:  |
+        bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
+    - name: Localhost test
+      run:  curl -I --http2 http://localhost:5555
+    - name: Destroy container and file
+      run:  docker-compose down
+    - name: Slack Notification
+      uses: act10ns/slack@v1
+      with: 
+        status: ${{ job.status }}
+        SLACK_COLOR: ${{ job.status }}
+        SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
+        channel: '#github_action_status'
+        message: Build and testing {{ job.status }}
+      if: always()
+  Adminer-ARM64:
     runs-on: ubuntu-22.04
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     name: Build on ubuntu22.04 aarch64
     steps:
+      - name: Slack Notification
+        uses: act10ns/slack@v1
+        with: 
+          status: starting
+          channel: '#github_action_status'
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
+          message: Starting Adminer ARM 64 Build and Testing...
+        if: always()
       - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
         name: Run commands
@@ -46,3 +91,12 @@ jobs:
         run:  curl -I --http2 http://localhost:5555
       - name: Destroy container and file
         run:  docker-compose down
+      - name: Slack Notification
+        uses: act10ns/slack@v1
+        with: 
+          status: ${{ job.status }}
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
+          channel: '#github_action_status'
+          message: Build and testing {{ job.status }}
+        if: always()
