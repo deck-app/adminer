@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-    name: Build on ubuntu22.04 aarch64
+    name: Adminer-ARM64
     steps:
       - name: Slack Notification
         uses: act10ns/slack@v1
