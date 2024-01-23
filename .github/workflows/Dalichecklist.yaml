@@ -1,8 +1,8 @@
-name: Adminer 
+name: Mongodb 
 
 on:
   schedule:
-  - cron:  '30 18 * * *'
+  - cron:  '00 23 * * *'
   push:
     branches: [ master ]
   pull_request:
@@ -11,18 +11,7 @@ on:
 jobs:
   Adminer-AMD64:
     runs-on: ubuntu-latest
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-    - name: Slack Notification
-      uses: act10ns/slack@v1
-      with: 
-        status: starting
-        channel: '#github_action_status'
-        SLACK_COLOR: ${{ job.status }}
-        SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
-        message: Starting Adminer AMD 64 Build and Testing...
-      if: always()
     - uses: actions/checkout@v2
     - name: Build the Docker image Adminer
       run: docker-compose -f "docker-compose.yml" up -d --build
@@ -36,29 +25,20 @@ jobs:
     - name: Destroy container and file
       run:  docker-compose down
     - name: Slack Notification
-      uses: act10ns/slack@v1
-      with: 
-        status: ${{ job.status }}
-        SLACK_COLOR: ${{ job.status }}
-        SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
-        channel: '#github_action_status'
-        message: Build and testing {{ job.status }}
-      if: always()
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_CHANNEL: github_action_status
+        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: 'Post Content Adminer AMD64 :rocket:'
+        SLACK_TITLE: Post Title
+        SLACK_USERNAME: rtCamp
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   Adminer-ARM64:
     runs-on: ubuntu-22.04
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-    name: Adminer-ARM64
+    name: MongoDB-ARM64
     steps:
-      - name: Slack Notification
-        uses: act10ns/slack@v1
-        with: 
-          status: starting
-          channel: '#github_action_status'
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
-          message: Starting Adminer ARM 64 Build and Testing...
-        if: always()
       - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
         name: Run commands
@@ -66,18 +46,11 @@ jobs:
         with:
           arch: aarch64
           distro: ubuntu22.04
-
-          # Not required, but speeds up builds by storing container images in
-          # a GitHub package registry.
-         # githubToken: ${{ github.token }}
-
-          # Set an output parameter `uname` for use in subsequent steps
           run: |
             uname -a
             echo ::set-output name=uname::$(uname -a)
 
       - name: Get the output
-        # Echo the `uname` output parameter from the `runcmd` step
         run: |
           echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
       - name: Build the Docker image Adminer
@@ -92,11 +65,13 @@ jobs:
       - name: Destroy container and file
         run:  docker-compose down
       - name: Slack Notification
-        uses: act10ns/slack@v1
-        with: 
-          status: ${{ job.status }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_CHANNEL: github_action_status
           SLACK_COLOR: ${{ job.status }}
-          SLACK_ICON: https://raw.githubusercontent.com/deck-app/adminer/master/default.png?size=48
-          channel: '#github_action_status'
-          message: Build and testing {{ job.status }}
-        if: always()
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_MESSAGE: 'Post Content Adminer ARM64 :rocket:'
+          SLACK_TITLE: Post Title
+          SLACK_USERNAME: rtCamp
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
