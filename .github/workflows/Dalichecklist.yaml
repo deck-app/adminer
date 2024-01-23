@@ -37,7 +37,7 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   Adminer-ARM64:
     runs-on: ubuntu-22.04
-    name: MongoDB-ARM64
+    name: Adminer-ARM64
     steps:
       - uses: actions/checkout@v4
       - uses: uraimo/run-on-arch-action@v2
