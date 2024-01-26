@@ -2,7 +2,7 @@ name: Adminer
 
 on:
   schedule:
-  - cron:  '00 02 * * *'
+  - cron:  '30 18 * * *'
   push:
     branches: [ master ]
   pull_request:
