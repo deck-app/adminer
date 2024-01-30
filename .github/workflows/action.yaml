@@ -42,7 +42,7 @@ jobs:
           footer: "Linked Repo <{repo_url}|{repo}>" 
           mention_users: "U056E1KTCTG,"
           mention_users_when: "SUCCESS"
-          mention_groups: "github_action_success"
+          mention_groups: "C06H0SB11JL, #github_action_success"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Notify on FAIL
