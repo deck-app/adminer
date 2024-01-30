@@ -14,70 +14,82 @@ jobs:
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image Adminer
-      run: docker-compose -f "docker-compose.yml" up -d --build
-    - name: PHP version check
-      run:  docker exec adminer_adminer_1 php -v
-    - name: Localhost test
-      run:  |
-        bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
-    - name: Localhost test
-      run:  curl -I --http2 http://localhost:5555
-    - name: Destroy container and file
-      run:  docker-compose down
-    - name: Slack Notification
-      uses: keithalpichi/slack-action@0.0.6
-      with:
-        # template: plain2
-        icon_url: https://raw.githubusercontent.com/deck-app/adminer/master/default.png
-        icon_emoji: ":fire:"
-        description: Override icon_url
-        channel: '#github_action_status'
-        title: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        # SLACK_ICON: https://github.com/rtCamp.png?size=48
-        # SLACK_MESSAGE: 'Post Content Adminer AMD64 :rocket:'
-        # SLACK_TITLE: Post Title
-        # SLACK_USERNAME: rtCamp
-        # SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-        # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - uses: actions/checkout@v2
+      - name: Build the Docker image Adminer
+        run: docker-compose -f "docker-compose.yml" up -d --build
+      - name: PHP version check
+        run:  docker exec adminer_adminer_1 php -v
+      - name: Localhost test
+        run:  |
+          bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
+      - name: Localhost test
+        run:  curl -I --http2 http://localhost:5555
+      - name: Destroy container and file
+        run:  docker-compose down
+      - uses: ravsamhq/notify-slack-action@v2
+        if: always()
+      - name: Notify on SUCCESS
+        if: ${{ SUCCESS() }}
+        with:
+          status: ${{ job.status }}
+          notification_title: "{workflow} has {status_message}"
+          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+          footer: "Linked Repo <{repo_url}|{repo}>"
+          mention_groups: "C06H0SB11JL"
+      - name: Notify on FAIL
+        if: ${{ failure() }}
+        with:
+          status: ${{ job.status }}
+          notification_title: "{workflow} has {status_message}"
+          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+          footer: "Linked Repo <{repo_url}|{repo}>"
+          mention_groups: "C06G95T1YH3"
   Adminer-ARM64:
     runs-on: ubuntu-22.04
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     name: Adminer-ARM64
     steps:
-    - uses: actions/checkout@v4
-    - uses: uraimo/run-on-arch-action@v2
-      name: Run commands
-      id: runcmd
-      with:
-        arch: aarch64
-        distro: ubuntu22.04
-        run: |
-          uname -a
-          echo ::set-output name=uname::$(uname -a)
+      - uses: actions/checkout@v4
+      - uses: uraimo/run-on-arch-action@v2
+        name: Run commands
+        id: runcmd
+        with:
+          arch: aarch64
+          distro: ubuntu22.04
+          run: |
+            uname -a
+            echo ::set-output name=uname::$(uname -a)
 
-    - name: Get the output
-      run: |
-        echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
-    - name: Build the Docker image Adminer
-      run: docker-compose -f "docker-compose.yml" up -d --build
-    - name: PHP version check
-      run:  docker exec adminer_adminer_1 php -v
-    - name: Localhost test
-      run:  |
-        bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
-    - name: Localhost test
-      run:  curl -I --http2 http://localhost:5555
-    - name: Destroy container and file
-      run:  docker-compose down
-    - name: Slack Notification
-      uses: keithalpichi/slack-action@0.0.6
-      with:
-        template: plain1
-        icon_emoji: ":fire:"
-        description: Override icon_url
-        channel: '#github_action_status'
-        title: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        icon_url: https://raw.githubusercontent.com/deck-app/adminer/master/default.png
+      - name: Get the output
+        run: |
+          echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
+      - name: Build the Docker image Adminer
+        run: docker-compose -f "docker-compose.yml" up -d --build
+      - name: PHP version check
+        run:  docker exec adminer_adminer_1 php -v
+      - name: Localhost test
+        run:  |
+          bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
+      - name: Localhost test
+        run:  curl -I --http2 http://localhost:5555
+      - name: Destroy container and file
+        run:  docker-compose down
+      - uses: ravsamhq/notify-slack-action@v2
+        if: always()
+      - name: Notify on SUCCESS
+        if: ${{ SUCCESS() }}
+        with:
+          status: ${{ job.status }}
+          notification_title: "{workflow} has {status_message}"
+          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+          footer: "Linked Repo <{repo_url}|{repo}>"
+          mention_groups: "C06H0SB11JL"
+      - name: Notify on FAIL
+        if: ${{ failure() }}
+        with:
+          status: ${{ job.status }}
+          notification_title: "{workflow} has {status_message}"
+          message_format: "{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}>"
+          footer: "Linked Repo <{repo_url}|{repo}>"
+          mention_groups: "C06G95T1YH3"
