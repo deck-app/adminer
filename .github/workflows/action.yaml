@@ -36,14 +36,14 @@ jobs:
       with:
         status: SUCCESS
         slack_channel: github_action_status
-        token: ${{ secrets.SLACK_WEBHOOK_URL }}
+        slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
     - name: Notify on FAIL
       if: ${{ failure() }}
       uses: actions/checkout@v3
       with:
         status: FAIL
         slack_channel: github_action_status
-        token: ${{ secrets.SLACK_WEBHOOK_URL }}
+        slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
     # - name: Slack Notification
     #   uses: rtCamp/action-slack-notify@v2
     #   env:
@@ -59,8 +59,8 @@ jobs:
     runs-on: ubuntu-22.04
     name: Adminer-ARM64
     steps:
-      - uses: actions/checkout@v4
-      - uses: uraimo/run-on-arch-action@v2
+      - uses: actions/checkout@v3
+      - uses: uraimo/run-on-arch-action@v3
         name: Run commands
         id: runcmd
         with:
