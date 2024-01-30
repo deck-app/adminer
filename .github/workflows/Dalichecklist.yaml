@@ -28,7 +28,7 @@ jobs:
       env:
         ENV_TEST: ${{ secrets.ENV_TEST }}
       run: |
-        echo "$ENV_TEST" > ${{ github.workspace }}/dotenv/.env.test
+        echo "$ENV_TEST" > .env.test
       shell: bash
     - name: Notify on SUCCESS
       if: ${{ SUCCESS() }}
@@ -86,7 +86,7 @@ jobs:
         env:
           ENV_TEST: ${{ secrets.ENV_TEST }}
         run: |
-          echo "$ENV_TEST" > ${{ github.workspace }}/dotenv/.env.test
+          echo "$ENV_TEST" > .env.test
         shell: bash
       - name: Notify on SUCCESS
         if: ${{ SUCCESS() }}
