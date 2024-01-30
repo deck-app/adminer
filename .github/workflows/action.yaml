@@ -35,15 +35,15 @@ jobs:
       uses: actions/checkout@v3
       with:
         status: SUCCESS
-        SLACK_CHANNEL: github_action_status
-        slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        slack_channel: github_action_status
+        slack_incoming_url: ${{ secrets.SLACK_WEBHOOK_URL }}
     - name: Notify on FAIL
       if: ${{ failure() }}
       uses: actions/checkout@v3
       with:
-        status: SUCCESS
-        SLACK_CHANNEL: github_action_status
-        slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        status: FAIL
+        slack_channel: github_action_status
+        slack_incoming_url: ${{ secrets.SLACK_WEBHOOK_URL }}
     # - name: Slack Notification
     #   uses: rtCamp/action-slack-notify@v2
     #   env:
