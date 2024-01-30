@@ -24,18 +24,6 @@ jobs:
         run:  curl -I --http2 http://localhost:5555
       - name: Destroy container and file
         run:  docker-compose down
-      - name: Create ENV 
-        env:
-          ENV_TEST: ${{ secrets.ENV_TEST }}
-        run: |
-          echo "$ENV_TEST" > ${{ github.workspace }}/dotenv/.env.test
-        shell: bash
-      - name: Notify on SUCCESS
-        if: ${{ SUCCESS() }}
-        users: ./.github/actions/slack-notify
-        with:
-          status: SUCCESS
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Slack Notification
         uses: keithalpichi/slack-action@0.0.6
         env:
