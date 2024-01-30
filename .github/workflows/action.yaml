@@ -32,13 +32,13 @@ jobs:
       shell: bash
     - name: Notify on SUCCESS
       if: ${{ SUCCESS() }}
-      uses: ./.github/slack-notify
+      uses: actions/checkout@v3
       with:
         status: SUCCESS
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     - name: Notify on FAIL
       if: ${{ failure() }}
-      uses: ./.github/slack-notify
+      uses: actions/checkout@v3
       with:
         status: SUCCESS
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -90,13 +90,13 @@ jobs:
         shell: bash
       - name: Notify on SUCCESS
         if: ${{ SUCCESS() }}
-        uses: ./.github/actions/slack-notify
+        uses: actions/checkout@v3
         with:
           status: SUCCESS
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Notify on FAIL
         if: ${{ failure() }}
-        uses: ./.github/actions/slack-notify
+        uses: .actions/checkout@v3
         with:
           status: SUCCESS
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
