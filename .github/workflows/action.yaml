@@ -29,12 +29,12 @@ jobs:
     - name: Slack Notification
       uses: keithalpichi/slack-action@0.0.6
       with:
-        template: plain2
+        # template: plain2
+        icon_url: https://raw.githubusercontent.com/deck-app/adminer/master/default.png
         icon_emoji: ":fire:"
         description: Override icon_url
         channel: '#github_action_status'
         title: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        icon_url: https://raw.githubusercontent.com/deck-app/adminer/master/default.png
         # SLACK_ICON: https://github.com/rtCamp.png?size=48
         # SLACK_MESSAGE: 'Post Content Adminer AMD64 :rocket:'
         # SLACK_TITLE: Post Title
