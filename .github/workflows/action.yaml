@@ -30,7 +30,7 @@ jobs:
       uses: keithalpichi/slack-action@0.0.6
       with:
         template: plain1
-        description: Everything looks good!
+        description: Override icon_url
         channel: '#github_action_status'
         icon_emoji: ":fire:"
         title: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
@@ -76,7 +76,7 @@ jobs:
       uses: keithalpichi/slack-action@0.0.6
       with:
         template: plain1
-        description: Everything looks good!
+        description: Override icon_url
         channel: '#github_action_status'
         icon_emoji: ":fire:"
         title: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
