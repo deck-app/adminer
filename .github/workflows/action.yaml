@@ -11,71 +11,71 @@ on:
 jobs:
   Adminer-AMD64:
     runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Build the Docker image Adminer
-        run: docker-compose -f "docker-compose.yml" up -d --build
-      - name: PHP version check
-        run:  docker exec adminer_adminer_1 php -v
-      - name: Localhost test
-        run:  |
-          bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
-      - name: Localhost test
-        run:  curl -I --http2 http://localhost:5555
-      - name: Destroy container and file
-        run:  docker-compose down
-      - name: Slack Notification
-        uses: keithalpichi/slack-action@0.0.6
-        env:
-          channel: github_action_status
-          status: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-          template: plain2
-          icon_url: https://raw.githubusercontent.com/deck-app/adminer/master/default.png
-          # SLACK_ICON: https://github.com/rtCamp.png?size=48
-          # SLACK_MESSAGE: 'Post Content Adminer AMD64 :rocket:'
-          # SLACK_TITLE: Post Title
-          # SLACK_USERNAME: rtCamp
-          # SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    - uses: actions/checkout@v2
+    - name: Build the Docker image Adminer
+      run: docker-compose -f "docker-compose.yml" up -d --build
+    - name: PHP version check
+      run:  docker exec adminer_adminer_1 php -v
+    - name: Localhost test
+      run:  |
+        bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
+    - name: Localhost test
+      run:  curl -I --http2 http://localhost:5555
+    - name: Destroy container and file
+      run:  docker-compose down
+    - name: Slack Notification
+      uses: keithalpichi/slack-action@0.0.6
+      with:
+        template: plain1
+        channel: '#github_action_status'
+        icon_emoji: ":fire:"
+        title: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        icon_url: https://raw.githubusercontent.com/deck-app/adminer/master/default.png
+        # SLACK_ICON: https://github.com/rtCamp.png?size=48
+        # SLACK_MESSAGE: 'Post Content Adminer AMD64 :rocket:'
+        # SLACK_TITLE: Post Title
+        # SLACK_USERNAME: rtCamp
+        # SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   Adminer-ARM64:
     runs-on: ubuntu-22.04
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     name: Adminer-ARM64
     steps:
-      - uses: actions/checkout@v4
-      - uses: uraimo/run-on-arch-action@v2
-        name: Run commands
-        id: runcmd
-        with:
-          arch: aarch64
-          distro: ubuntu22.04
-          run: |
-            uname -a
-            echo ::set-output name=uname::$(uname -a)
-
-      - name: Get the output
+    - uses: actions/checkout@v4
+    - uses: uraimo/run-on-arch-action@v2
+      name: Run commands
+      id: runcmd
+      with:
+        arch: aarch64
+        distro: ubuntu22.04
         run: |
-          echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
-      - name: Build the Docker image Adminer
-        run: docker-compose -f "docker-compose.yml" up -d --build
-      - name: PHP version check
-        run:  docker exec adminer_adminer_1 php -v
-      - name: Localhost test
-        run:  |
-          bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
-      - name: Localhost test
-        run:  curl -I --http2 http://localhost:5555
-      - name: Destroy container and file
-        run:  docker-compose down
-      - name: Slack Notification
-        uses: keithalpichi/slack-action@0.0.6
-        env:
-          channel: github_action_status
-          status: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-          template: plain2
-          icon_url: https://raw.githubusercontent.com/deck-app/adminer/master/default.png
-          # SLACK_ICON: https://github.com/rtCamp.png?size=48
-          # SLACK_MESSAGE: 'Post Content Adminer AMD64 :rocket:'
-          # SLACK_TITLE: Post Title
-          # SLACK_USERNAME: rtCamp
-          # SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          uname -a
+          echo ::set-output name=uname::$(uname -a)
+
+    - name: Get the output
+      run: |
+        echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
+    - name: Build the Docker image Adminer
+      run: docker-compose -f "docker-compose.yml" up -d --build
+    - name: PHP version check
+      run:  docker exec adminer_adminer_1 php -v
+    - name: Localhost test
+      run:  |
+        bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:5555)" != "200" ]]; do sleep 5; done'
+    - name: Localhost test
+      run:  curl -I --http2 http://localhost:5555
+    - name: Destroy container and file
+      run:  docker-compose down
+    - name: Slack Notification
+      uses: keithalpichi/slack-action@0.0.6
+      with:
+        template: plain1
+        channel: '#github_action_status'
+        icon_emoji: ":fire:"
+        title: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+        icon_url: https://raw.githubusercontent.com/deck-app/adminer/master/default.png
