@@ -42,7 +42,8 @@ jobs:
           footer: "Linked Repo <{repo_url}|{repo}>" 
           mention_users: "U056E1KTCTG,"
           mention_users_when: "SUCCESS"
-          mention_groups: "C06H0SB11JL,!channel"
+          mention_groups: "github_action_success"
+        env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Notify on FAIL
         if: ${{ failure() }}
@@ -55,6 +56,7 @@ jobs:
           mention_users: "U056E1KTCTG"
           mention_users_when: "failure,warnings"
           mention_groups: "C06G95T1YH3,!channel"
+        env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         
   Adminer-ARM64:
@@ -105,6 +107,7 @@ jobs:
           mention_users: "U056E1KTCTG"
           mention_users_when: "SUCCESS"
           mention_groups: "C06H0SB11JL,!channel"
+        env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Notify on FAIL
         if: ${{ failure() }}
@@ -117,4 +120,5 @@ jobs:
           mention_users: "U056E1KTCTG"
           mention_users_when: "failure,warnings"
           mention_groups: "C06G95T1YH3,!channel"
+        env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
