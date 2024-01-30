@@ -24,17 +24,35 @@ jobs:
       run:  curl -I --http2 http://localhost:5555
     - name: Destroy container and file
       run:  docker-compose down
-    - name: Slack Notification
-      uses: rtCamp/action-slack-notify@v2
+    - name: Create ENV 
       env:
-        SLACK_CHANNEL: github_action_status
-        SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
-        SLACK_ICON: https://github.com/rtCamp.png?size=48
-        SLACK_MESSAGE: 'Post Content Adminer AMD64 :rocket:'
-        SLACK_TITLE: Post Title
-        SLACK_USERNAME: rtCamp
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        ENV_TEST: ${{ secrets.ENV_TEST }}
+      run: |
+        echo "$ENV_TEST" > ${{ github.workspace }}/dotenv/.env.test
+      shell: bash
+    - name: Notify on SUCCESS
+      if: ${{ SUCCESS() }}
+      users: ./.github/actions/slack-notify
+      with:
+        status: SUCCESS
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    - name: Notify on FAIL
+      if: ${{ failure() }}
+      users: ./.github/actions/slack-notify
+      with:
+        status: SUCCESS
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    # - name: Slack Notification
+    #   uses: rtCamp/action-slack-notify@v2
+    #   env:
+    #     SLACK_CHANNEL: github_action_status
+    #     SLACK_COLOR: ${{ job.status }} # or a specific color like 'good' or '#ff00ff'
+    #     SLACK_ICON: https://github.com/rtCamp.png?size=48
+    #     SLACK_MESSAGE: 'Post Content Adminer AMD64 :rocket:'
+    #     SLACK_TITLE: Post Title
+    #     SLACK_USERNAME: rtCamp
+    #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+    #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   Adminer-ARM64:
     runs-on: ubuntu-22.04
     name: Adminer-ARM64
@@ -64,14 +82,32 @@ jobs:
         run:  curl -I --http2 http://localhost:5555
       - name: Destroy container and file
         run:  docker-compose down
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_CHANNEL: github_action_status
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_ICON: https://github.com/rtCamp.png?size=48
-          SLACK_MESSAGE: 'Post Content Adminer ARM64 :rocket:'
-          SLACK_TITLE: Post Title
-          SLACK_USERNAME: rtCamp
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Create ENV 
+      env:
+        ENV_TEST: ${{ secrets.ENV_TEST }}
+      run: |
+        echo "$ENV_TEST" > ${{ github.workspace }}/dotenv/.env.test
+      shell: bash
+    - name: Notify on SUCCESS
+      if: ${{ SUCCESS() }}
+      users: ./.github/actions/slack-notify
+      with:
+        status: SUCCESS
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    - name: Notify on FAIL
+      if: ${{ failure() }}
+      users: ./.github/actions/slack-notify
+      with:
+        status: SUCCESS
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      # - name: Slack Notification
+      #   uses: rtCamp/action-slack-notify@v2
+      #   env:
+      #     SLACK_CHANNEL: github_action_status
+      #     SLACK_COLOR: ${{ job.status }}
+      #     SLACK_ICON: https://github.com/rtCamp.png?size=48
+      #     SLACK_MESSAGE: 'Post Content Adminer ARM64 :rocket:'
+      #     SLACK_TITLE: Post Title
+      #     SLACK_USERNAME: rtCamp
+      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
