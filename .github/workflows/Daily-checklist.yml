@@ -171,38 +171,38 @@ jobs:
           mention_groups: "C06H0SB11JL"
           mention_groups_when: "SUCCESS"
           payload: |
-          {
-            "text": "GitHub Action failed",
-            "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Production deployment check failed* :fire_engine:\n High error rate detected after deployment! Rolling back..."
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": ":github: Failed action"
-                      },
-                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": ":grafana: Resolve"
-                      },
-                      "url": "https://<your_organization>.grafana.net/d/my-app-dashboard?from=now-1h&to=now"
+            {
+              "text": "GitHub Action failed",
+              "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "*Production deployment check failed* :fire_engine:\n High error rate detected after deployment! Rolling back..."
                     }
-                  ]
-                }
-          }
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": ":github: Failed action"
+                        },
+                        "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      },
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": ":grafana: Resolve"
+                        },
+                        "url": "https://<your_organization>.grafana.net/d/my-app-dashboard?from=now-1h&to=now"
+                      }
+                    ]
+                  }
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_SUCCESS }}
       - name: Notify on FAIL
@@ -218,37 +218,37 @@ jobs:
           mention_groups: "C06G95T1YH3"
           mention_groups_when: "failure,warnings"
           payload: |
-          {
-            "text": "GitHub Action failed",
-            "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Production deployment check failed* :fire_engine:\n High error rate detected after deployment! Rolling back..."
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": ":github: Failed action"
-                      },
-                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": ":grafana: Resolve"
-                      },
-                      "url": "https://<your_organization>.grafana.net/d/my-app-dashboard?from=now-1h&to=now"
+            {
+              "text": "GitHub Action failed",
+              "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "*Production deployment check failed* :fire_engine:\n High error rate detected after deployment! Rolling back..."
                     }
-                  ]
-                }
-          }
+                  },
+                  {
+                    "type": "actions",
+                    "elements": [
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": ":github: Failed action"
+                        },
+                        "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      },
+                      {
+                        "type": "button",
+                        "text": {
+                          "type": "plain_text",
+                          "text": ":grafana: Resolve"
+                        },
+                        "url": "https://<your_organization>.grafana.net/d/my-app-dashboard?from=now-1h&to=now"
+                      }
+                    ]
+                  }
+            }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_FAIL }}
